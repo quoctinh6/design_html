@@ -31,8 +31,12 @@ flowchart TD
      ```
 2. **Thiết lập Hệ thống Token Màu mở (Xem chi tiết tại [`02_DESIGN_SYSTEM_TEMPLATE.md`](02_DESIGN_SYSTEM_TEMPLATE.md)):**
    - Chỉ khóa **vai trò ngữ nghĩa** của màu (`--bg-primary`, `--bg-surface`, `--text-primary`, `--text-muted`, `--brand-primary`, `--brand-accent`), để mỗi dự án tự do sáng tạo sắc thái màu (tông ấm, tông lạnh, tông đất, tông đơn sắc, hoặc tương phản cao) miễn đạt chuẩn độ tương phản WCAG AA/AAA.
-3. **Hoạch định `SITEMAP.md`:**
-   - Liệt kê danh sách các trang HTML cần xây dựng, mục tiêu chuyển đổi của từng trang, cấu trúc phân đoạn (Chapters/Sections) trên từng trang và thành phần tương tác thật (`data-ui="..."`) trên mỗi trang.
+3. **Hoạch định `SITEMAP.md` (Bắt buộc quy hoạch cả các Trang Pháp Lý với Layout Độc Bản ngay từ đầu):**
+   - Liệt kê danh sách toàn bộ các trang HTML cần xây dựng, mục tiêu chuyển đổi của từng trang, cấu trúc phân đoạn (Chapters/Sections) và thành phần tương tác thật (`data-ui="..."`) trên mỗi trang.
+   - **BẮT BUỘC đưa các Trang Pháp Lý Việt Nam vào `SITEMAP.md` ngay từ Giai đoạn 1** (dựa trên phân loại website từ [`05_VN_LEGAL_COMPLIANCE.md`](05_VN_LEGAL_COMPLIANCE.md)):
+     - Mọi website có biểu mẫu thu thập thông tin bắt buộc có trang **`chinh-sach-bao-mat.html` (Quy chế Bảo vệ Dữ liệu Cá nhân & Pháp lý)**.
+     - Website Thương mại điện tử / Bán hàng / Dịch vụ có thu phí bắt buộc quy hoạch thêm trang/phân khu **Điều khoản giao dịch, Chính sách thanh toán, vận chuyển & đổi trả**.
+   - **Quy tắc Thiết kế Layout riêng cho Trang Pháp Lý ngay từ Sitemap:** Tuyệt đối **CẤM dùng lại (`copy-paste`) layout trang phụ thông thường (`subpage-masthead`)** cho các trang pháp lý. Ngay trong `SITEMAP.md`, trang pháp lý phải được thiết kế theo **Kiến trúc Văn kiện Pháp chế & Hồ sơ Tuân thủ độc bản (`Legal Charter & Dossier Layout`)** gồm: Masthead văn kiện đóng dấu hiệu lực, Băng thông số thời hạn pháp định (`SLA Band`), Không gian đọc 2 cột có Mục lục neo cố định bên trái + Luồng điều khoản & Bảng kiểm toán bên phải, và Trạm tương tác thực hiện quyền chủ thể dữ liệu.
 
 ---
 
@@ -58,11 +62,11 @@ flowchart TD
 ## GIAI ĐOẠN 3: Chốt `DESIGN.md` & Khung CSS Dùng Chung Trước Khi Tách Subagent
 
 Trước khi gọi bất kỳ Subagent nào, **Lead Agent** phải hoàn tất:
-1. `DESIGN.md` — Chứa toàn bộ token màu, typography, ma trận nút bấm, thang `z-index`, quy tắc hoạt ảnh và ma trận responsive.
-2. `SITEMAP.md` — Chứa cấu trúc từng trang và liên kết điều hướng thống nhất.
-3. `css/styles.css` — Chứa toàn bộ biến `:root`, hệ thống lưới, kiểu nút bấm và khung bố cục dùng chung.
+1. `DESIGN.md` — Chứa toàn bộ token màu, typography, ma trận nút bấm, thang `z-index`, quy tắc hoạt ảnh, ma trận responsive và **kiến trúc layout riêng biệt cho từng nhóm trang (Trang chủ, Trang nội dung/danh mục, và Trang Văn kiện Pháp lý độc bản)**.
+2. `SITEMAP.md` — Chứa cấu trúc từng trang (bao gồm đầy đủ các trang pháp lý bắt buộc) và liên kết điều hướng thống nhất ở cả Header lẫn Footer.
+3. `css/styles.css` — Chứa toàn bộ biến `:root`, hệ thống lưới, kiểu nút bấm, chuẩn hóa biểu mẫu (`.member-form-row` / `.member-form-field`, `.member-form-consent`) và **toàn bộ hệ thống class CSS của Layout Văn kiện Pháp lý (`.legal-charter-hero`, `.legal-dossier-stamp`, `.legal-sla-band`, `.legal-workspace-section`, `.legal-index-rail`, `.legal-clauses-stream`, `.legal-clause-card`, `.legal-rights-section`)**.
 
-> **Lý do bắt buộc:** Khi `DESIGN.md` và `css/styles.css` đã được chốt làm nguồn chuẩn duy nhất (*Single Source of Truth*), các Subagent chạy song song sẽ tạo ra các trang đồng nhất 100% mà không xảy ra xung đột CSS.
+> **Lý do bắt buộc:** Khi `DESIGN.md`, `SITEMAP.md` và `css/styles.css` đã định nghĩa sẵn đầy đủ cả trang nội dung lẫn trang pháp lý làm nguồn chuẩn duy nhất (*Single Source of Truth*), các Subagent chạy song song sẽ tạo ra các trang đồng nhất 100% mà không bao giờ bị thiếu class CSS hay phải dùng tạm layout của trang cũ.
 
 ---
 
@@ -72,13 +76,15 @@ Sử dụng công cụ `invoke_subagent` để tách công việc thành các Su
 
 ### 4.1. Phân Tách Theo Sitemap & Logic Tương Tác
 - **Subagent 1 (`Homepage & Core Interactive JS Architect`):**
-  - Phụ trách `index.html` và `js/main.js` (toàn bộ bộ lọc tương tác, điều khiển hoạt ảnh chống văng chữ, menu di động, và popup ảnh Fancybox v5 Local).
+  - Phụ trách `index.html` và `js/main.js` (toàn bộ bộ lọc tương tác, điều khiển hoạt ảnh chống văng chữ, menu di động, kiểm tra đồng ý dữ liệu cá nhân trên form, logic điều hướng mục lục/quyền pháp lý, và popup ảnh Fancybox v5 Local).
 - **Subagent 2 (`Brand Story / About Page Builder`):**
   - Phụ trách trang giới thiệu / câu chuyện thương hiệu / năng lực cốt lõi.
 - **Subagent 3 (`Catalog / Projects / Events Archive Builder`):**
   - Phụ trách trang danh mục sản phẩm / dự án / sự kiện kèm bộ lọc trực tiếp và thư viện ảnh.
 - **Subagent 4 (`Conversion / Membership / Contact Builder`):**
   - Phụ trách các trang biểu mẫu chuyển đổi, đối tác, FAQ và liên hệ.
+- **Subagent 5 (`Legal Charter & Compliance Dossier Builder`):**
+  - Phụ trách các trang pháp lý (`chinh-sach-bao-mat.html`, điều khoản hoạt động...) sử dụng **Layout Văn kiện Hiến chương Pháp lý độc bản** đã được quy hoạch trong `SITEMAP.md` và `css/styles.css`, tuyệt đối không sao chép lại layout của các trang nội dung thông thường.
 
 ### 4.2. Ma Trận 5 Dải Thiết Bị Bắt Buộc Mọi Subagent Phải Đảm Bảo
 1. **Desktop & Widescreen (`1280px – 1920px+`)**
