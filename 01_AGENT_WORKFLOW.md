@@ -89,10 +89,11 @@ Sử dụng công cụ `invoke_subagent` để tách công việc thành các Su
 
 ---
 
-## GIAI ĐOẠN 5: Tối Ưu Thiết Bị Thật & Kiểm Định Tự Động Với Bộ Skill `emilkowalski`
+## GIAI ĐOẠN 5: Tối Ưu Thiết Bị Thật, Kiểm Định Tự Động & Rà Soát Pháp Lý Việt Nam
 
-Sau khi các Subagent hoàn thành, kích hoạt bộ skill từ [`https://github.com/emilkowalski/skill`](https://github.com/emilkowalski/skill) (xem chi tiết tại [`04_REAL_DEVICE_AND_FOLDABLE.md`](04_REAL_DEVICE_AND_FOLDABLE.md)):
+Sau khi các Subagent hoàn thành, kích hoạt bộ skill từ [`https://github.com/emilkowalski/skill`](https://github.com/emilkowalski/skill) (xem [`04_REAL_DEVICE_AND_FOLDABLE.md`](04_REAL_DEVICE_AND_FOLDABLE.md)) kết hợp quy trình tuân thủ pháp luật Việt Nam (xem [`05_VN_LEGAL_COMPLIANCE.md`](05_VN_LEGAL_COMPLIANCE.md)):
 1. **`mobile-native`:** Xử lý tràn ngang trên Safari iOS / Chrome Android thật (`overflow-x: clip` trên cả `html` và `body`), vùng tai thỏ `safe-area-inset`, chiều cao động `100svh`/`100dvh`, và khóa `:hover` bằng `@media (hover: hover) and (pointer: fine)`.
 2. **`break-ui`:** Thử nghiệm phá giao diện bằng chuỗi văn bản dài, email không dấu cách, màn hình siêu hẹp `280px–320px` và thao tác co kéo liên tục.
 3. **`emil-design-eng` & `animation-performance`:** Đảm bảo phản hồi chạm tức thì (`touch-action: manipulation`, `:active` `scale(0.97)`) và giữ tốc độ khung hình `60fps/120fps`.
-4. **Chạy kiểm tra tự động `lint.mjs` và `inspect.mjs`:** Đạt **`0 FAIL, 0 WARN`** ở cả 3 độ rộng chuẩn (`1440px`, `768px`, `390px`) trước khi bàn giao hoặc triển khai.
+4. **Rà soát Tuân thủ Pháp luật Việt Nam (`05_VN_LEGAL_COMPLIANCE.md`):** Tham khảo checklist [`https://github.com/mhfed/vn-law-check`](https://github.com/mhfed/vn-law-check) kết hợp **bắt buộc chủ động tìm kiếm trực tuyến (`search_web`) các Luật, Nghị định, Thông tư mới nhất vừa ban hành** (không phụ thuộc 1 nguồn duy nhất) để kiểm tra biểu mẫu thu thập dữ liệu cá nhân, thông tin pháp nhân ở `Footer`, điều khoản giao dịch và nội dung quảng cáo.
+5. **Chạy kiểm tra tự động `lint.mjs` và `inspect.mjs`:** Đạt **`0 FAIL, 0 WARN`** ở cả 3 độ rộng chuẩn (`1440px`, `768px`, `390px`) trước khi bàn giao hoặc triển khai.
