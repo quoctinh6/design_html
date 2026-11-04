@@ -168,3 +168,36 @@ window.Fancybox.bind('[data-fancybox="page-gallery"]', {
 });
 ```
 
+---
+
+## 6. Quy Tắc Chuẩn Hóa Hệ Thống Biểu Mẫu (`Form Reset & Class Contract`) — Chống Lỗi Input Mặc Định Trình Duyệt
+
+Khi nhiều Subagent cùng xây dựng các trang con hoặc thêm trang mới sau này, nếu một trang dùng `.member-form-field` trong khi `css/styles.css` chỉ định nghĩa `.member-form-row` (hoặc dùng `.matcher-chip-row` thay vì `.matcher-option-grid`), trình duyệt sẽ rơi về giao diện `<input>` / `<textarea>` mặc định thô cứng và làm vỡ bố cục. Vì vậy, `css/styles.css` **BẮT BUỘC** phải áp dụng quy tắc bảo vệ kép sau:
+
+1. **Định nghĩa CSS bao phủ trực tiếp mọi thẻ `input, select, textarea` bên trong `form` và hỗ trợ đồng thời cả 2 tên class (`.member-form-row`, `.member-form-field`):**
+   ```css
+   .member-form-row,
+   .member-form-field {
+     display: flex;
+     flex-direction: column;
+     gap: 6px;
+   }
+
+   .member-form input:not([type="checkbox"]):not([type="radio"]),
+   .member-form select,
+   .member-form textarea {
+     width: 100%;
+     min-height: 48px;
+     padding: 12px 14px;
+     background-color: var(--bg);
+     color: var(--ink);
+     border: 0;
+     border-radius: 0px;
+     font-family: var(--font-text);
+     font-size: var(--step-body);
+   }
+   ```
+2. **Bắt buộc chạy cả `lint.mjs` VÀ `inspect.mjs` (render thực tế bằng trình duyệt headless) sau mỗi lần thêm/sửa trang:**
+   - Công cụ `lint.mjs` của `taste-skill` chỉ quét mã nguồn tĩnh (regex text, inline style), **không phát hiện được lỗi lệch tên class CSS**.
+   - Do đó, mọi Agent sau khi sửa HTML/CSS bắt buộc phải chạy `inspect.mjs` và mở ảnh chụp `.taste-skill/inspect-*/desktop-page-*.jpg` để kiểm tra trực quan các biểu mẫu, nút bấm và khoảng cách trước khi deploy.
+
