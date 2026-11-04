@@ -32,6 +32,17 @@ Tài liệu này quy định quy trình bắt buộc dành cho mọi Agent khi t
 >         - **Cột phải (`.legal-clauses-stream`):** Mở đầu bằng **Bảng Kiểm Toán Dữ Liệu Thực Tế (`.legal-audit-matrix`)** đối chiếu trực tiếp mã nguồn website, theo sau là các thẻ **Điều khoản Pháp chế (`.legal-clause-card`)** có gắn nhãn số hiệu điều luật.
 >      4. **Trạm Tương Tác Thực Hiện Quyền Chủ Thể Dữ Liệu (`[data-ui="pdpl-rights-console"]`):** Cho phép người dùng bấm chọn quyền cần thực hiện (*Xem & sao lục*, *Đính chính*, *Rút lại sự đồng ý*, *Yêu cầu xóa dữ liệu*) để tự động điền căn cứ pháp lý, thời hạn giải quyết và gửi yêu cầu trực tiếp.
 
+### 2.3. Bốn Quy Tắc Kỹ Thuật Bắt Buộc Khi Code Trang Pháp Lý (Để Đạt `0 FAIL, 0 WARN` Khi Chạy `lint.mjs` & `inspect.mjs`)
+1. **Đặt thẻ tiêu đề (`h1`, `h2`, `h3`) làm phần tử con đầu tiên của khối (Chống lỗi `[eyebrow-above-heading]`):**
+   - Trong `.legal-hero-main`, đặt `<h1>` lên đầu tiên rồi mới đặt đoạn dẫn `.legal-hero-lead` và nhãn `.legal-doc-badge` ở bên dưới.
+   - Trong mỗi thẻ `.legal-sla-card` và `.legal-clause-card`, đặt `<h3>` làm phần tử con đầu tiên, sau đó mới đến `.legal-sla-days` hoặc thanh nhãn `.legal-clause-top` (`.legal-clause-pill` + `.legal-clause-law-ref`).
+2. **Không dùng số thứ tự có số 0 đứng đầu (`01`, `02`, `03`) (Chống lỗi `[numbered-step]`):**
+   - Dùng chữ số tự nhiên (`2 Ngày`, `10 Ngày`, `15 Ngày`, `20 Ngày`) và số La Mã (`Điều I`, `Điều II`, `Điều III`...) cho các điều khoản pháp chế.
+3. **Chỉ gắn `data-ui="pdpl-rights-console"` lên khung tương tác `.matcher-console` (Chống lỗi `[ui-wrapper]`):**
+   - Không gắn `data-ui` lên thẻ `<section class="legal-rights-section">` bao ngoài.
+4. **Cỡ chữ nhãn pháp lý tối thiểu `var(--step-small)` (`>= 13.5px`) (Chống lỗi `[small-text]` & `[micro-label]`):**
+   - Mọi nhãn `.legal-doc-badge`, `.legal-dossier-status`, `.legal-sla-ref`, `.legal-status-tag`, `.legal-clause-pill`, `.legal-clause-law-ref` đều dùng `font-size: var(--step-small)` và không bật `text-transform: uppercase` cỡ nhỏ.
+
 ---
 
 ## 3. Sáu Hạng Mục Thiết Kế Giao Diện (`UI/UX Legal By Design`) Bắt Buộc Đúng Luật Việt Nam
