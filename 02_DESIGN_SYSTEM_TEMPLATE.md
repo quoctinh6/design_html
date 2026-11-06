@@ -88,11 +88,17 @@ Mọi dự án phải định nghĩa rõ 4 trạng thái (`Idle`, `Hover`, `Acti
 
 ---
 
-## 5. Yêu Cầu Bắt Buộc: Dùng Thư Viện Fancybox v5 Local & Custom Thiết Kế Lại Giao Diện Popup Đồng Bộ Design System
+## 5. Chiến Lược Lựa Chọn Thư Viện JS Cho Tính Năng UI/UX & Quy Tắc Custom Skinning Đồng Bộ (Tránh Tự Dev Gây Lỗi)
 
+### 5.1. Triết Lý "Không Tự Dev Lại Từ Đầu Các Tính Năng UI/UX Phức Tạp"
+- **Nguyên nhân:** Các tính năng tương tác người dùng như Lightbox, Panzoom (phóng to/kéo di chuyển), Carousel/Slider (vuốt chạm có quán tính), Dropdown tìm kiếm đa mục, Toast thông báo, Accordion phức tạp... đòi hỏi xử lý rất nhiều bài toán hóc búa về bounding box, con lăn chuột (`wheel delta`), sự kiện cảm ứng chạm (`touch gestures`), khóa cuộn body (`scroll lock`) và chuyển động đa khung hình.
+- **Hậu quả nếu tự dev tay:** Thường xuyên phát sinh lỗi mất kiểm soát: cuộn qua trái rồi qua phải thì không ấn phóng to ảnh được nữa, kẹt cử chỉ zoom, đơ nút bấm, giật lag trên di động thật.
+- **Giải pháp bắt buộc:** **Khảo sát và chọn ngay thư viện JS tiêu chuẩn công nghiệp (đã qua hàng triệu người dùng kiểm thử), tải về lưu trữ cục bộ (`assets/vendor/`) và chỉ viết code custom skinning giao diện** theo đúng bảng màu & token của dự án. Không tự dev lại bánh xe để tiết kiệm thời gian và đảm bảo độ ổn định 100%.
+
+### 5.2. Điển Hình Bắt Buộc: Dùng Thư Viện Fancybox v5 Local & Custom Thiết Kế Lại Giao Diện Popup
 Mọi dự án website có hình ảnh nội dung, tư liệu hoặc thư viện ảnh **BẮT BUỘC** sử dụng thư viện **Fancybox v5 (`@fancyapps/ui` v5) lưu trữ cục bộ (`assets/vendor/fancybox/fancybox.css` + `assets/vendor/fancybox/fancybox.umd.js`)** và **phải thiết kế lại (custom) toàn bộ hệ thống nút bấm, thanh công cụ, bộ đếm, chú thích và ảnh thu nhỏ** theo đúng bảng màu & ngôn ngữ hình học của `DESIGN.md` (tuyệt đối không để giao diện mặc định của thư viện):
 
-### 5.1. Yêu Cầu Tùy Biến Thiết Kế (`Custom UI Skinning`) Bằng Biến CSS Chính Thức `--f-button-*`
+#### Yêu Cầu Tùy Biến Thiết Kế (`Custom UI Skinning`) Bằng Biến CSS Chính Thức `--f-button-*`
 - **Đồng bộ Bảng màu & Độ bo góc (`border-radius`) với Hệ thống Nút Bấm của Dự án:**
   - Gán các biến `--f-button-*` trên `.fancybox__toolbar` và `.fancybox__nav` theo đúng Token Ngữ Nghĩa của dự án (`--field-primary`, `--accent`, `--accent-ink`, `--bg`, `--ink`).
   - Áp dụng **Đảo Cực Màu (`Polarity Swap`) khi `:hover`** và **Phản Hồi Vật Lý `scale(0.95)` khi `:active`** cho mọi nút điều hướng (`<`, `>`) và các nút trên thanh công cụ (`zoomIn`, `zoomOut`, `toggle1to1`, `slideshow`, `fullscreen`, `thumbs`, `close`).
